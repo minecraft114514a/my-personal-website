@@ -1,0 +1,427 @@
+<!DOCTYPE html>
+<html lang="zh" data-theme="dark">
+<head>
+    <meta charset="UTF-8">
+    <title>个人主页 - SYSTEM-HTY</title>
+    <meta name="description" content="SYSTEM-HTY的个人主页">
+    <meta name="keywords" content="个人主页,SYSTEM-HTY,Python开发者">
+    <meta name="author" content="SYSTEM-HTY">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    
+    <style>
+        :root {
+            --primary-color: #3498db;
+            --secondary-color: #2ecc71;
+            --accent-color: #e74c3c;
+            --dark-color: #2c3e50;
+            --light-color: #f8f9fa;
+            --text-color: #333;
+            --text-light: #7f8c8d;
+            --card-bg: rgba(255, 255, 255, 0.92);
+            --shadow: 0 4px 15px rgba(0, 0, 0, 0.25);
+            --transition: all 0.3s ease;
+            --nav-bg: rgba(52, 152, 219, 0.8);
+            --border-color: #ddd;
+        }
+
+        [data-theme="dark"] {
+            --text-color: #e0e0e0;
+            --text-light: #a0a0a0;
+            --light-color: #121212;
+            --card-bg: #1e1e1e;
+            --shadow: 0 4px 15px rgba(0, 0, 0, 0.6);
+            --primary-color: #64b5f6;
+            --secondary-color: #81c784;
+            --accent-color: #ff8a65;
+            --dark-color: #f5f5f5;
+            --nav-bg: rgba(30, 30, 30, 0.95);
+            --border-color: #444;
+        }
+
+        body, html {
+            height: 100%;
+            margin: 0;
+            font-family: 'Microsoft YaHei', sans-serif;
+            color: var(--text-color);
+            scroll-behavior: smooth;
+            background-color: var(--light-color);
+        }
+
+        .loader {
+            position: fixed;
+            top: 0; left: 0;
+            width: 100%; height: 100%;
+            background: var(--light-color);
+            z-index: 9999;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            flex-direction: column;
+        }
+        .loader-spinner {
+            width: 50px;
+            height: 50px;
+            border: 5px solid var(--card-bg);
+            border-top: 5px solid var(--primary-color);
+            border-radius: 50%;
+            animation: spin 1s linear infinite;
+            margin-bottom: 20px;
+        }
+        @keyframes spin {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
+        .loader.hidden {
+            animation: fadeOut 0.5s forwards;
+            pointer-events: none;
+        }
+        @keyframes fadeOut {
+            0% { opacity: 1; }
+            100% { opacity: 0; visibility: hidden极域电子教室破解工具; }
+        }
+
+        #bg {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(135deg, var(--primary-color) 0%, var(--secondary-color) 100%);
+            z-index: -1;
+            opacity: 0.9;
+        }
+
+        .top-nav {
+            position: absolute;
+            top: 20px;
+            right: 20px;
+            z-index: 20;
+            display: flex;
+            gap: 15px;
+        }
+
+        .nav-link {
+            padding: 8px 15px;
+            background-color: var(--nav-bg);
+            color: white !important;
+            border-radius: 4px;
+            text-decoration: none;
+            transition: var(--transition);
+            font-weight: bold;
+            border: 1px solid var(--border-color);
+        }
+
+        .nav-link:hover {
+            background-color: var(--primary-color);
+            transform: translateY(-2px);
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+        }
+
+        .home-link {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            width: 40px;
+            height: 40px;
+            background-color: var(--nav-bg);
+            color: white;
+            border-radius: 50%;
+            text-decoration: none;
+            transition: var(--transition);
+            font-size: 20px;
+            border: 1px solid var(--border-color);
+        }
+
+        .home-link:hover {
+            background-color: var(--primary-color);
+            transform: translateY(-2px);
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+        }
+
+        .container {
+            background: var(--card-bg);
+            max-width: 800px;
+            margin: 80px auto;
+            padding: 30px;
+            border-radius: 10px;
+            box-shadow: var(--shadow);
+            position: relative;
+            color: var(--text-color);
+            border: 1px solid var(--border-color);
+        }
+
+        h1, h2, h3 {
+            color: var(--dark-color);
+            margin-top: 0;
+            text-align: center;
+        }
+
+        p, li {
+            line-height: 1.6;
+            color: var(--text-color);
+        }
+
+        a {
+            color: var(--primary-color);
+            text-decoration: none;
+            font-weight: bold;
+        }
+
+        a:hover {
+            text-decoration: underline;
+            color: var(--secondary-color);
+        }
+
+        .user-profile {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            margin-bottom: 30px;
+            padding-bottom: 20px;
+            border-bottom: 1px solid var(--border-color);
+        }
+
+        .user-avatar {
+            width: 120px;
+            height: 120px;
+            border-radius: 50%;
+            background-color: var(--primary-color);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            font-weight: bold;
+            overflow: hidden;
+            margin-bottom: 20px;
+            border: 3px solid var(--secondary-color);
+        }
+
+        .user-avatar img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+        }
+
+        .user-info {
+            text-align: center;
+        }
+
+        .user-name {
+            font-size: 1.8em;
+            margin-bottom: 10px;
+            color: var(--dark-color);
+        }
+
+        .user-email {
+            font-size: 1.1em;
+            color: var(--text-light);
+            margin-bottom: 20px;
+        }
+
+        .logout-btn {
+            padding: 10px 25px;
+            background-color: var(--accent-color);
+            color: white;
+            border: none;
+            border-radius: 30px;
+            cursor: pointer;
+            font-weight: bold;
+            font-size: 1.1em;
+            transition: var(--transition);
+        }
+
+        .logout-btn:hover {
+            background-color: #ff6b4a;
+            transform: translateY(-3px);
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.2);
+        }
+
+        .stats-container {
+            display: flex;
+            justify-content: space-around;
+            margin: 30px 0;
+        }
+
+        .stat-card {
+            text-align: center;
+            padding: 20px;
+            background: var(--card-bg);
+            border-radius: 8px;
+            width: 150px;
+            box-shadow: var(--shadow);
+            border-left: 4px solid var(--primary-color);
+        }
+
+        .stat-number {
+            font-size: 2.5em;
+            font-weight: bold;
+            color: var(--primary-color);
+            margin-bottom: 10px;
+        }
+
+        .stat-label {
+            color: var(--text-light);
+        }
+
+        .recent-activity {
+            margin-top: 30px;
+        }
+
+        .activity-list {
+            list-style: none;
+            padding: 0;
+        }
+
+        .activity-item {
+            padding: 15px;
+            margin-bottom: 15px;
+            background: var(--card-bg);
+            border-radius: 6px;
+            box-shadow: var(--shadow);
+            border-left: 4px solid var(--secondary-color);
+        }
+
+        .activity-date {
+            color: var(--text-light);
+            font-size: 0.9em;
+            margin-bottom: 5px;
+        }
+
+        .activity-content {
+            font-size: 1.1em;
+        }
+
+        footer {
+            margin-top: 30px;
+            padding-top: 20px;
+            border-top: 1px solid var(--border-color);
+            text-align: center;
+            color: var(--text-light);
+        }
+    </style>
+</head>
+<body>
+    <div class="loader" id="loader">
+        <div class="loader-spinner"></div>
+        <p>加载中...</p>
+    </div>
+    
+    <div id="bg"></div>
+    
+    <div class="top-nav">
+        <a href="index.html" class="nav-link">返回首页</a>
+    </div>
+    
+    <div class="container">
+        <div class="user-profile">
+            <div class="user-avatar" id="userAvatar">
+                <img src="images/favicon.ico" alt="用户头像">
+            </div>
+            <div class="user-info">
+                <h1 class="user-name" id="userName">SYSTEM-HTY</h1>
+                <p class="user-email" id="userEmail">644043561@qq.com</p>
+                <button class="logout-btn" id="logoutBtn">退出登录</button>
+            </div>
+        </div>
+        
+        <div class="stats-container">
+            <div class="stat-card">
+                <div class="stat-number">12</div>
+                <div class="stat-label">项目数量</div>
+            </div>
+            <div class="stat-card">
+                <div class="stat-number">28</div>
+                <div class="stat-label">评论数量</div>
+            </div>
+            <div class="stat-card">
+                <div class="stat-number">365</div>
+                <div class="stat-label">登录天数</div>
+            </div>
+        </div>
+        
+        <div class="recent-activity">
+            <h2>最近活动</h2>
+            <ul class="activity-list">
+                <li class="activity-item">
+                    <div class="activity-date">2025-09-10 14:30</div>
+                    <div class="activity-content">发布了新项目：网络监测工具 v3.2</div>
+                </li>
+                <li class="activity-item">
+                    <div class="activity-date">2025-09-08 10:15</div>
+                    <div class="activity-content">回复了用户评论</div>
+                </li>
+                <li class="activity-item">
+                    <div class="activity-date">2025-09-05 16:45</div>
+                    <div class="activity-content">更新了个人资料</div>
+                </li>
+                <li class="activity-item">
+                    <div class="activity-date">2025-09-01 09:20</div>
+                    <div class="activity-content">发布了新工具：数据备份助手</div>
+                </li>
+            </ul>
+        </div>
+        
+        <footer>
+            <p>© 2023-2025 SYSTEM-HTY. 保留所有权利。</p>
+            <p>个人主页 - 最后更新: 2025-09-10</p>
+        </footer>
+    </div>
+
+    <script>
+        // 页面加载完成后隐藏加载动画
+        document.addEventListener('DOMContentLoaded', function() {
+            setTimeout(function() {
+                try {
+                    var loader = document.getElementById('loader');
+                    if (loader) {
+                        loader.classList.add('hidden');
+                    }
+                    
+                    // 加载用户信息
+                    loadUserInfo();
+                } catch (error) {
+                    console.error('隐藏加载动画时出错:', error);
+                }
+            }, 500);
+        });
+
+        // 用户系统功能
+        const CURRENT_USER_KEY = 'current_user';
+        
+        // 加载用户信息
+        function loadUserInfo() {
+            try {
+                const currentUser = JSON.parse(localStorage.getItem(CURRENT_USER_KEY) || null);
+                const userName = document.getElementById('userName');
+                const userEmail = document.getElementById('userEmail');
+                const userAvatar = document.getElementById('userAvatar');
+                
+                if (currentUser) {
+                    userName.textContent = currentUser.username;
+                    userEmail.textContent = currentUser.email;
+                    
+                    // 设置站长头像
+                    if (currentUser.email === '644043561@qq.com') {
+                        userAvatar.innerHTML = '<img src="images/favicon.ico" alt="站长头像">';
+                    }
+                } else {
+                    // 用户未登录，跳转回首页
+                    window.location.href = 'index.html';
+                }
+            } catch (error) {
+                console.error('加载用户信息时出错:', error);
+            }
+        }
+        
+        // 处理退出登录
+        function handleLogout() {
+            localStorage.removeItem(CURRENT_USER_KEY);
+            alert('已退出登录');
+            window.location.href = 'index.html';
+        }
+        
+        // 添加事件监听器
+        document.getElementById('logoutBtn').addEventListener('click', handleLogout);
+    </script>
+</body>
+</html>

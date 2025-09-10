@@ -1,0 +1,975 @@
+<!DOCTYPE html>
+<html lang="zh" data-theme="dark">
+<head>
+    <meta charset="UTF-8">
+    <title>SYSTEM-HTY - Python开发者个人网站</title>
+    <meta name="description" content="SYSTEM-HTY的个人网站，Python开发者，分享Python开发项目和编程经验">
+    <meta name="keywords" content="Python开发,编程,SYSTEM-HTY,Python工具">
+    <meta name="author" content="SYSTEM-HTY">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    
+    <!-- Netlify Identity Widget -->
+    <script src="https://identity.netlify.com/v1/netlify-identity.js"></script>
+    
+    <style>
+        :root {
+            --primary-color: #3498db;
+            --secondary-color: #2ecc71;
+            --accent-color: #e74c3c;
+            --dark-color: #2c3e50;
+            --light-color: #f8f9fa;
+            --text-color: #333;
+            --text-light: #7f8c8d;
+            --card-bg: rgba(255, 255, 255, 0.92);
+            --shadow: 0 4px 15px rgba(0, 0, 0, 0.25);
+            --transition: all 0.3s ease;
+            --nav-bg: rgba(52, 152, 219, 0.8);
+            --border-color: #ddd;
+        }
+
+        [data-theme="dark"] {
+            --text-color: #e0e0e0;
+            --text-light: #a0a0a0;
+            --light-color: #121212;
+            --card-bg: #1e1e1e;
+            --shadow: 0 4px 15px rgba(0, 0, 0, 0.6);
+            --primary-color: #64b5f6;
+            --secondary-color: #81c784;
+            --accent-color: #ff8a65;
+            --dark-color: #f5f5f5;
+            --nav-bg: rgba(30, 30, 30, 0.95);
+            --border-color: #444;
+        }
+
+        body, html {
+            height: 100%;
+            margin: 0;
+            font-family: 'Microsoft YaHei', sans-serif;
+            color: var(--text-color);
+            scroll-behavior: smooth;
+            background-color: var(--light-color);
+        }
+
+        .loader {
+            position: fixed;
+            top: 0; left: 0;
+            width: 100%; height: 100%;
+            background: var(--light-color);
+            z-index: 9999;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            flex-direction: column;
+        }
+        .loader-spinner {
+            width: 50px;
+            height: 50px;
+            border: 5px solid var(--card-bg);
+            border-top: 5px solid var(--primary-color);
+            border-radius: 50%;
+            animation: spin 1s linear infinite;
+            margin-bottom: 20px;
+        }
+        @keyframes spin {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
+        .loader.hidden {
+            animation: fadeOut 0.5s forwards;
+            pointer-events: none;
+        }
+        @keyframes fadeOut {
+            0% { opacity: 1; }
+            100% { opacity: 0; visibility: hidden; }
+        }
+
+        #bg {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(135deg, var(--primary-color) 0%, var(--secondary-color) 100%);
+            z-index: -1;
+            opacity: 0.9;
+        }
+
+        .top-nav {
+            position: absolute;
+            top: 20px;
+            right: 190px;
+            z-index: 20;
+            display: flex;
+            gap: 15px;
+        }
+
+        .nav-link {
+            padding: 8px 15px;
+            background-color: var(--nav-bg);
+            color: white !important;
+            border-radius: 4px;
+            text-decoration: none;
+            transition: var(--transition);
+            font-weight: bold;
+            border: 1px solid var(--border-color);
+        }
+
+        .nav-link:hover {
+            background-color: var(--primary-color);
+            transform: translateY(-2px);
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+        }
+
+        .home-link {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            width: 40px;
+            height: 40px;
+            background-color: var(--nav-bg);
+            color: white;
+            border-radius: 50%;
+            text-decoration: none;
+            transition: var(--transition);
+            font-size: 20px;
+            border: 1px solid var(--border-color);
+        }
+
+        .home-link:hover {
+            background-color: var(--primary-color);
+            transform: translateY(-2px);
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+        }
+
+        .corner-image {
+            position: absolute;
+            top: 20px;
+            right: 20px;
+            width: 150px;
+            height: auto;
+            border-radius: 8px;
+            box-shadow: var(--shadow);
+            z-index: 10;
+            border: none;
+            transition: transform 0.3s;
+        }
+
+        .corner-image:hover {
+            transform: scale(1.03);
+        }
+
+        .time-display {
+            text-align: center;
+            margin: 15px 0 25px;
+            font-size: 1.2em;
+            color: var(--dark-color);
+            font-weight: bold;
+            font-family: 'Courier New', monospace;
+            background-color: var(--card-bg);
+            padding: 8px 15px;
+            border-radius: 6px;
+            display: inline-block;
+            box-shadow: var(--shadow);
+            border: 1px solid var(--border-color);
+        }
+
+        .container {
+            background: var(--card-bg);
+            max-width: 800px;
+            margin: 40px auto;
+            padding: 30px;
+            border-radius: 10px;
+            box-shadow: var(--shadow);
+            position: relative;
+            color: var(--text-color);
+            border: 1px solid var(--border-color);
+        }
+
+        h1, h2, h3 {
+            color: var(--dark-color);
+            margin-top: 0;
+        }
+
+        h1 {
+            border-bottom: 2px solid var(--primary-color);
+            padding-bottom: 10px;
+            text-align: center;
+            position: relative;
+        }
+
+        p, li {
+            line-height: 1.6;
+            color: var(--text-color);
+        }
+
+        a {
+            color: var(--primary-color);
+            text-decoration: none;
+            font-weight: bold;
+        }
+
+        a:hover {
+            text-decoration: underline;
+            color: var(--secondary-color);
+        }
+
+        .bilibili-link {
+            display: inline-flex;
+            align-items: center;
+            margin-top: 10px;
+            padding: 8px 15px;
+            background-color: #fb7299;
+            color: white !important;
+            border-radius: 4px;
+            transition: var(--transition);
+        }
+
+        .bilibili-link:hover {
+            background-color: #ff9db5;
+            transform: translateY(-2px);
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+        }
+
+        section {
+            margin-bottom: 30px;
+            padding-bottom: 20px;
+            border-bottom: 1px solid var(--border-color);
+        }
+
+        ul {
+            padding-left: 20px;
+        }
+
+        li {
+            margin-bottom: 8px;
+            position: relative;
+            padding-left: 20px;
+            color: var(--text-color);
+        }
+
+        li::before {
+            content: "•";
+            color: var(--primary-color);
+            font-weight: bold;
+            position: absolute;
+            left: 0;
+        }
+
+        .feature-cards {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 20px;
+            margin: 25px 0;
+        }
+
+        .feature-card {
+            flex: 1;
+            min-width: 200px;
+            background: var(--card-bg);
+            padding: 20px;
+            border-radius: 8px;
+            text-align: center;
+            transition: var(--transition);
+            border-left: 4px solid var(--primary-color);
+            box-shadow: var(--shadow);
+        }
+
+        .feature-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.2);
+            border-left-color: var(--secondary-color);
+        }
+
+        footer {
+            margin-top: 30px;
+            padding-top: 20px;
+            border-top: 1px solid var(--border-color);
+            text-align: center;
+            color: var(--text-light);
+        }
+
+        .top-controls {
+            position: absolute;
+            top: 20px;
+            left: 20px;
+            z-index: 20;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .theme-toggle {
+            background: var(--card-bg);
+            border: 1px solid var(--border-color);
+            border-radius: 20px;
+            padding: 6px 12px;
+            cursor: pointer;
+            transition: var(--transition);
+            white-space: nowrap;
+            color: var(--text-color);
+        }
+
+        .theme-toggle:hover {
+            background: var(--primary-color);
+            color: white;
+        }
+
+        #backToTop {
+            display: none;
+            position: fixed;
+            bottom: 30px;
+            right: 30px;
+            z-index: 99;
+            border: none;
+            outline: none;
+            background-color: var(--primary-color);
+            color: white;
+            cursor: pointer;
+            padding: 12px 16px;
+            border-radius: 50%;
+            font-size: 18px;
+            box-shadow: var(--shadow);
+        }
+
+        #backToTop:hover {
+            background-color: var(--secondary-color);
+            transform: translateY(-5px);
+            box-shadow: 0 6px 15px rgba(0, 0, 0, 0.3);
+        }
+
+        .comments-section {
+            margin-top: 30px;
+            padding: 20px;
+            background: var(--card-bg);
+            border-radius: 8px;
+            border-left: 4px solid var(--primary-color);
+        }
+
+        .comment-form {
+            margin-bottom: 20px;
+        }
+
+        .comment-form input,
+        .comment-form textarea {
+            width: 100%;
+            padding: 10px;
+            margin-bottom: 10px;
+            border: 1px solid var(--border-color);
+            border-radius: 4px;
+            background-color: var(--card-bg);
+            color: var(--text-color);
+        }
+
+        .comment-form textarea {
+            min-height: 100px;
+            resize: vertical;
+        }
+
+        .comment-form button {
+            padding: 10px 20px;
+            background-color: var(--primary-color);
+            color: white;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+        }
+
+        .comment {
+            padding: 15px;
+            margin-bottom: 15px;
+            background: var(--card-bg);
+            border-radius: 6px;
+            box-shadow: var(--shadow);
+            border: 1px solid var(--border-color);
+        }
+
+        .comment-header {
+            display: flex;
+            justify-content: space-between;
+            margin-bottom: 10px;
+            font-weight: bold;
+            color: var(--dark-color);
+        }
+
+        .comment-date {
+            color: var(--text-light);
+            font-size: 0.9em;
+        }
+
+        .feedback-form {
+            margin-top: 30px;
+            padding: 20px;
+            background: var(--card-bg);
+            border-radius: 8px;
+            border-left: 4px solid var(--secondary-color);
+        }
+
+        .project-demo {
+            margin: 20px 0;
+            padding: 15px;
+            background: var(--card-bg);
+            border-radius: 8px;
+            border-left: 4px solid var(--primary-color);
+        }
+
+        .demo-placeholder {
+            height: 200px;
+            background: var(--border-color);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            border-radius: 6px;
+            margin-bottom: 15px;
+            color: var(--text-light);
+        }
+
+        .version-history {
+            margin-top: 15px;
+            padding: 10px;
+            background: var(--card-bg);
+            border-radius: 6px;
+            font-size: 0.9em;
+            border: 1px solid var(--border-color);
+        }
+
+        .version-item {
+            margin-bottom: 10px;
+            padding-bottom: 10px;
+            border-bottom: 1px dashed var(--border-color);
+            color: var(--text-color);
+        }
+
+        .rss-subscribe {
+            margin-top: 20px;
+            padding: 10px;
+            text-align: center;
+            background: var(--card-bg);
+            border-radius: 6px;
+            border: 1px solid var(--border-color);
+        }
+
+        .user-status {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .user-avatar {
+            width: 32px;
+            height: 32px;
+            border-radius: 50%;
+            background-color: var(--primary-color);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            font-weight: bold;
+            overflow: hidden;
+        }
+
+        .user-avatar img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+        }
+
+        .user-name {
+            color: white;
+            font-weight: bold;
+        }
+
+        @media (max-width: 768px) {
+            .top-nav {
+                position: fixed;
+                bottom: 0;
+                left: 0;
+                right: 0;
+                top: auto;
+                background: var(--card-bg);
+                padding: 10px;
+                justify-content: space-around;
+                flex-direction: row;
+                gap: 5px;
+                border-top: 1px solid var(--border-color);
+            }
+            
+            .nav-link {
+                padding: 8px 12px;
+                font-size: 0.9em;
+                flex: 1;
+                text-align: center;
+            }
+            
+            .corner-image {
+                width: 100px;
+                top: 10px;
+                right: 10px;
+            }
+            
+            .container {
+                margin: 70px 10px 80px;
+                padding: 20px;
+            }
+            
+            #backToTop {
+                bottom: 80px;
+                right: 15px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="loader" id="loader">
+        <div class="loader-spinner"></div>
+        <p>加载中...</p>
+    </div>
+    
+    <div id="bg"></div>
+    
+    <div class="top-controls">
+        <button class="theme-toggle" id="themeToggle">🌓 切换主题</button>
+    </div>
+    
+    <div class="top-nav">
+        <a href="index.html" class="nav-link">主页</a>
+        <a href="download.html" class="nav-link">下载</a>
+        <a href="#projects" class="nav-link">项目</a>
+        <a href="about.html" class="nav-link">关于</a>
+        
+        <div id="authButtons">
+            <a href="#" class="nav-link" id="loginBtn">登录</a>
+            <a href="#" class="nav-link" id="registerBtn">注册</a>
+        </div>
+        
+        <div id="userStatus" class="user-status" style="display: none;">
+            <div class="user-avatar" id="userAvatar"></div>
+            <span class="user-name" id="userName"></span>
+            <a href="#" class="nav-link" id="logoutBtn">退出</a>
+        </div>
+    </div>
+    
+    <div class="container">
+        <img class="corner-image" src="images/2.webp" alt="SYSTEM-HTY标志" 
+             onerror="this.onerror=null; this.style.display='none';">
+        
+        <header>
+            <h1>欢迎来到SYSTEM-HTY的网站！</h1>
+            <p>Python开发者 | 技术爱好者 | 工具创造者</p>
+            
+            <div class="time-display" id="current-time"></div>
+        </header>
+
+        <div class="feature-cards">
+            <div class="feature-card">
+                <h3>Python开发</h3>
+                <p>专注于实用工具开发</p>
+            </div>
+            <div class="feature-card">
+                <h3>开源分享</h3>
+                <p>所有工具免费提供</p>
+            </div>
+            <div class="feature-card">
+                <h3>持续更新</h3>
+                <p>定期添加新功能</p>
+            </div>
+        </div>
+
+        <section id="about">
+            <h2>关于我</h2>
+            <p>你好！我是HTY，一名热爱编程的开发者，专注于Python开发，喜欢创造解决实际问题的工具。</p>
+            <p>我的技术栈包括：Python, HTML, JavaScript，正在不断学习更多技术。</p>
+        </section>
+
+        <section id="projects">
+            <h2>项目亮点</h2>
+            <ul>
+                <li><strong>教学辅助工具</strong> - 功能强大的教学辅助工具</li>
+                <li><strong>数据备份助手</strong> - 自动化数据保护解决方案</li>
+                <li><strong>网络监测工具</strong> - 实时网络状态分析工具</li>
+            </ul>
+            <p>所有项目都可以在<a href="download.html">下载页面</a>获取。</p>
+            
+            <div class="project-demo">
+                <h3>项目演示</h3>
+                <div class="demo-placeholder">
+                    项目演示视频或截图将在这里显示
+                </div>
+                
+                <div class="version-history">
+                    <h4>版本历史</h4>
+                    <div class="version-item">
+                        <strong>v3.1.7</strong> (2025-8-31) - 新增高级功能
+                    </div>
+                    <div class="version-item">
+                        <strong>v3.0.2</strong> (2025-7-15) - 修复已知问题，提升稳定性
+                    </div>
+                    <div class="version-item">
+                        <strong>v2.9.5</strong> (2025-6-10) - 首次公开发布
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <section id="contact">
+            <h2>找到我</h2>
+            <p>您可以通过以下方式联系我或关注我的最新动态：</p>
+            <p>邮箱：<a href="mailto:644043561@qq.com">644043561@qq.com</a></p>
+            <p>B站主页：<a class="bilibili-link" href="https://space.bilibili.com/3537109889583643?spm_id_from=333.788.0.0" target="_blank" rel="noopener">访问我的B站空间</a></p>
+            
+            <div class="rss-subscribe">
+                <h3>订阅更新</h3>
+                <p>通过RSS订阅获取最新项目更新：</p>
+                <a href="rss.xml" id="rssLink">订阅RSS源</a>
+            </div>
+        </section>
+        
+        <section class="comments-section">
+            <h2>用户评论</h2>
+            <div id="commentFormContainer">
+                <div class="comment-form">
+                    <input type="text" id="commentName" placeholder="您的姓名">
+                    <textarea id="commentText" placeholder="您的评论..."></textarea>
+                    <button id="submitComment">提交评论</button>
+                </div>
+                <p id="loginToComment" style="display: none; color: var(--accent-color);">
+                    请<a href="#" id="loginLink">登录</a>后发表评论
+                </p>
+            </div>
+            <div id="commentsList">
+                <!-- 评论将动态添加到这里 -->
+                <p>加载评论中...</p>
+            </div>
+        </section>
+        
+        <section class="feedback-form">
+            <h2>反馈与建议</h2>
+            <div class="comment-form">
+                <input type="text" id="feedbackName" placeholder="您的姓名">
+                <input type="email" id="feedbackEmail" placeholder="您的邮箱">
+                <textarea id="feedbackText" placeholder="您的反馈或建议..."></textarea>
+                <button id="submitFeedback">提交反馈</button>
+            </div>
+        </section>
+
+        <footer>
+            <p>© 2023-2025 SYSTEM-HTY. 保留所有权利。</p>
+            <p>本网站使用HTML5、CSS3和JavaScript构建</p>
+            <p>加载时间: <span id="loadTime"></span> 毫秒</p>
+        </footer>
+    </div>
+    
+    <button id="backToTop" title="回到顶部">↑</button>
+
+    <script>
+        // 页面加载完成后隐藏加载动画
+        document.addEventListener('DOMContentLoaded', function() {
+            setTimeout(function() {
+                try {
+                    var loader = document.getElementById('loader');
+                    if (loader) {
+                        loader.classList.add('hidden');
+                    }
+                    
+                    // 记录加载时间
+                    var loadTime = performance.now();
+                    var loadTimeElement = document.getElementById('loadTime');
+                    if (loadTimeElement) {
+                        loadTimeElement.textContent = Math.round(loadTime);
+                    }
+                    
+                    // 初始化Netlify Identity
+                    initNetlifyIdentity();
+                    
+                    // 加载评论
+                    loadComments();
+                } catch (error) {
+                    console.error('初始化出错:', error);
+                }
+            }, 500);
+        });
+
+        // Netlify Identity初始化
+        function initNetlifyIdentity() {
+            // 检查Netlify Identity小部件是否已加载
+            if (window.netlifyIdentity) {
+                // 绑定事件
+                netlifyIdentity.on('init', user => {
+                    updateUserInterface(user);
+                });
+                
+                netlifyIdentity.on('login', user => {
+                    updateUserInterface(user);
+                    netlifyIdentity.close();
+                });
+                
+                netlifyIdentity.on('logout', () => {
+                    updateUserInterface(null);
+                });
+                
+                netlifyIdentity.on('error', err => {
+                    console.error('Netlify Identity错误:', err);
+                });
+                
+                // 初始化
+                netlifyIdentity.init();
+            } else {
+                console.error('Netlify Identity小部件未加载');
+            }
+            
+            // 绑定登录/注册按钮
+            document.getElementById('loginBtn').addEventListener('click', function(e) {
+                e.preventDefault();
+                netlifyIdentity.open('login');
+            });
+            
+            document.getElementById('registerBtn').addEventListener('click', function(e) {
+                e.preventDefault();
+                netlifyIdentity.open('signup');
+            });
+            
+            document.getElementById('loginLink').addEventListener('click', function(e) {
+                e.preventDefault();
+                netlifyIdentity.open('login');
+            });
+            
+            // 绑定退出按钮
+            document.getElementById('logoutBtn').addEventListener('click', function(e) {
+                e.preventDefault();
+                netlifyIdentity.logout();
+            });
+        }
+        
+        // 更新用户界面
+        function updateUserInterface(user) {
+            const authButtons = document.getElementById('authButtons');
+            const userStatus = document.getElementById('userStatus');
+            const userName = document.getElementById('userName');
+            const userAvatar = document.getElementById('userAvatar');
+            const commentForm = document.querySelector('.comment-form');
+            const loginToComment = document.getElementById('loginToComment');
+            
+            if (user) {
+                // 用户已登录
+                authButtons.style.display = 'none';
+                userStatus.style.display = 'flex';
+                userName.textContent = user.user_metadata.full_name || user.email;
+                
+                // 设置用户头像
+                userAvatar.textContent = (user.user_metadata.full_name || user.email).charAt(0).toUpperCase();
+                
+                // 显示评论表单
+                if (commentForm) commentForm.style.display = 'block';
+                if (loginToComment) loginToComment.style.display = 'none';
+            } else {
+                // 用户未登录
+                authButtons.style.display = 'flex';
+                userStatus.style.display = 'none';
+                
+                // 隐藏评论表单，显示登录提示
+                if (commentForm) commentForm.style.display = 'none';
+                if (loginToComment) loginToComment.style.display = 'block';
+            }
+        }
+        
+        // 从服务器获取评论
+        async function loadComments() {
+            try {
+                const response = await fetch('/.netlify/functions/get-comments');
+                
+                if (!response.ok) {
+                    throw new Error('获取评论失败');
+                }
+                
+                const comments = await response.json();
+                displayComments(comments);
+            } catch (error) {
+                console.error('加载评论时出错:', error);
+                document.getElementById('commentsList').innerHTML = '<p>无法加载评论，请稍后再试。</p>';
+            }
+        }
+        
+        // 显示评论
+        function displayComments(comments) {
+            const commentsList = document.getElementById('commentsList');
+            
+            if (!comments || comments.length === 0) {
+                commentsList.innerHTML = '<p>暂无评论，成为第一个评论者吧！</p>';
+                return;
+            }
+            
+            commentsList.innerHTML = '';
+            
+            // 按时间倒序排列
+            comments.sort((a, b) => new Date(b.date) - new Date(a.date));
+            
+            comments.forEach(comment => {
+                const commentElement = document.createElement('div');
+                commentElement.className = 'comment';
+                
+                const commentDate = new Date(comment.date).toLocaleString('zh-CN');
+                
+                commentElement.innerHTML = `
+                    <div class="comment-header">
+                        <span>${comment.name}</span>
+                        <span class="comment-date">${commentDate}</span>
+                    </div>
+                    <div class="comment-content">${comment.comment}</div>
+                `;
+                
+                commentsList.appendChild(commentElement);
+            });
+        }
+        
+        // 提交评论
+        document.getElementById('submitComment').addEventListener('click', async function() {
+            const name = document.getElementById('commentName').value.trim();
+            const commentText = document.getElementById('commentText').value.trim();
+            
+            if (!name || !commentText) {
+                alert('请填写姓名和评论内容');
+                return;
+            }
+            
+            try {
+                const user = netlifyIdentity.currentUser();
+                const userId = user ? user.id : 'anonymous';
+                
+                const response = await fetch('/.netlify/functions/save-comment', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                    },
+                    body: JSON.stringify({
+                        name,
+                        comment: commentText,
+                        userId,
+                        date: new Date().toISOString()
+                    })
+                });
+                
+                if (!response.ok) {
+                    throw new Error('提交评论失败');
+                }
+                
+                // 清空表单
+                document.getElementById('commentName').value = '';
+                document.getElementById('commentText').value = '';
+                
+                // 重新加载评论
+                await loadComments();
+                
+                alert('评论提交成功！');
+            } catch (error) {
+                console.error('提交评论时出错:', error);
+                alert('评论提交失败，请稍后再试。');
+            }
+        });
+        
+        // 提交反馈
+        document.getElementById('submitFeedback').addEventListener('click', async function() {
+            const name = document.getElementById('feedbackName').value.trim();
+            const email = document.getElementById('feedbackEmail').value.trim();
+            const feedbackText = document.getElementById('feedbackText').value.trim();
+            
+            if (!name || !email || !feedbackText) {
+                alert('请填写所有字段');
+                return;
+            }
+            
+            try {
+                const response = await fetch('/.netlify/functions/save-feedback', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                    'Authorization': 'Bearer ' + (netlifyIdentity.currentUser() ? netlifyIdentity.currentUser().token.access_token : '')
+                    },
+                    body: JSON.stringify({
+                        name,
+                        email,
+                        feedback: feedbackText,
+                        date: new Date().toISOString()
+                    })
+                });
+                
+                if (!response.ok) {
+                    throw new Error('提交反馈失败');
+                }
+                
+                // 清空表单
+                document.getElementById('feedbackName').value = '';
+                document.getElementById('feedbackEmail').value = '';
+                document.getElementById('feedbackText').value = '';
+                
+                alert('反馈提交成功！感谢您的意见。');
+            } catch (error) {
+                console.error('提交反馈时出错:', error);
+                alert('反馈提交失败，请稍后再试。');
+            }
+        });
+
+        // 时间显示功能
+        function updateTime() {
+            try {
+                var now = new Date();
+                var year = now.getFullYear();
+                var month = String(now.getMonth() + 1).padStart(2, '0');
+                var day = String(now.getDate()).padStart(2, '0');
+                var hours = String(now.getHours()).padStart(2, '0');
+                var minutes = String(now.getMinutes()).padStart(2, '0');
+                var seconds = String(now.getSeconds()).padStart(2, '0');
+                
+                var timeElement = document.getElementById('current-time');
+                if (timeElement) {
+                    timeElement.textContent = year + '/' + month + '/' + day + ' ' + hours + ':' + minutes + ':' + seconds;
+                }
+            } catch (error) {
+                console.error('更新时间时出错:', error);
+            }
+        }
+        
+        // 初始更新
+        updateTime();
+        
+        // 每秒更新一次
+        setInterval(updateTime, 1000);
+        
+        // 回到顶部功能
+        var backBtn = document.getElementById('backToTop');
+        if (backBtn) {
+            window.addEventListener('scroll', function() {
+                backBtn.style.display = window.scrollY > 300 ? 'block' : 'none';
+            });
+            
+            backBtn.addEventListener('click', function() {
+                window.scrollTo({ top: 0, behavior: 'smooth' });
+            });
+        }
+        
+        // 主题切换功能
+        var themeToggle = document.getElementById('themeToggle');
+        if (themeToggle) {
+            // 检查本地存储的主题设置
+            if (localStorage.getItem('theme') === 'light') {
+                document.documentElement.removeAttribute('data-theme');
+                themeToggle.textContent = '🌓 切换暗色';
+            } else {
+                document.documentElement.setAttribute('data-theme', 'dark');
+                themeToggle.textContent = '🌓 切换亮色';
+            }
+            
+            themeToggle.addEventListener('click', function() {
+                var currentTheme = document.documentElement.getAttribute('data-theme');
+                if (currentTheme === 'dark') {
+                    document.documentElement.removeAttribute('data-theme');
+                    localStorage.setItem('theme', 'light');
+                    themeToggle.textContent = '🌓 切换暗色';
+                } else {
+                    document.documentElement.setAttribute('data-theme', 'dark');
+                    localStorage.setItem('theme', 'dark');
+                    themeToggle.textContent = '🌓 切换亮色';
+                }
+            });
+        }
+    </script>
+</body>
+</html>
