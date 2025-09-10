@@ -10,6 +10,7 @@
     
     <!-- Netlify Identity Widget -->
     <script src="https://identity.netlify.com/v1/netlify-identity.js"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     
     <style>
         :root {
@@ -25,13 +26,14 @@
             --transition: all 0.3s ease;
             --nav-bg: rgba(52, 152, 219, 0.8);
             --border-color: #ddd;
+            --scoin-color: #9c27b0;
         }
 
         [data-theme="dark"] {
             --text-color: #e0e0e0;
             --text-light: #a0a0a0;
             --light-color: #121212;
-            --card-bg: #1e1e1e;
+            --card极域电子教室破解工具-bg: #1e1e1e;
             --shadow: 0 4px 15px rgba(0, 0, 0, 0.6);
             --primary-color: #64b5f6;
             --secondary-color: #81c784;
@@ -39,6 +41,7 @@
             --dark-color: #f5f5f5;
             --nav-bg: rgba(30, 30, 30, 0.95);
             --border-color: #444;
+            --scoin-color: #ba68c8;
         }
 
         body, html {
@@ -95,10 +98,20 @@
         }
 
         .top-nav {
-            position: absolute;
-            top: 20px;
-            right: 190px;
-            z-index: 20;
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            background: var(--nav-bg);
+            padding: 15px 20px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            z-index: 100;
+            box-shadow: var(--shadow);
+        }
+
+        .nav-links {
             display: flex;
             gap: 15px;
         }
@@ -141,6 +154,41 @@
             box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
         }
 
+        .user-status {
+            display: flex;
+            align-items: center;
+            gap: 15px;
+        }
+
+        .user-avatar {
+            width: 36px;
+            height: 36px;
+            border-radius: 50%;
+            background-color: var(--primary-color);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            font-weight: bold;
+            overflow: hidden;
+        }
+
+        .user-name {
+            color: white;
+            font-weight: bold;
+        }
+
+        .scoin-mini {
+            display: inline-flex;
+            align-items: center;
+            background-color: var(--scoin-color);
+            color: white;
+            padding: 3px 8px;
+            border-radius: 12px;
+            font-size: 0.8rem;
+            margin-left: 10px;
+        }
+
         .corner-image {
             position: absolute;
             top: 20px;
@@ -175,8 +223,8 @@
 
         .container {
             background: var(--card-bg);
-            max-width: 800px;
-            margin: 40px auto;
+            max-width: 1000px;
+            margin: 80px auto 40px;
             padding: 30px;
             border-radius: 10px;
             box-shadow: var(--shadow);
@@ -289,7 +337,7 @@
         }
 
         .top-controls {
-            position: absolute;
+            position: fixed;
             top: 20px;
             left: 20px;
             z-index: 20;
@@ -300,7 +348,7 @@
 
         .theme-toggle {
             background: var(--card-bg);
-            border: 1px solid var(--border极域电子教室破解工具-color);
+            border: 1px solid var(--border-color);
             border-radius: 20px;
             padding: 6px 12px;
             cursor: pointer;
@@ -448,34 +496,65 @@
             border: 1px solid var(--border-color);
         }
 
-        .user-status {
-            display: flex;
-            align-items: center;
-            gap: 10px;
+        .scoin-section {
+            margin: 30px 0;
+            padding: 20px;
+            background: var(--card-bg);
+            border-radius: 8px;
+            border-left: 4px solid var(--scoin-color);
+            box-shadow: var(--shadow);
         }
 
-        .user-avatar {
-            width: 32px;
-            height: 32px;
-            border-radius: 50%;
-            background-color: var(--primary-color);
+        .scoin-balance {
+            font-size: 1.5rem;
+            text-align: center;
+            margin: 20px 0;
+        }
+
+        .scoin-count {
+            font-size: 2.5rem;
+            font-weight: bold;
+            color: var(--scoin-color);
+        }
+
+        .scoin-actions {
             display: flex;
-            align-items: center;
             justify-content: center;
-            color: white;
-            font-weight: bold;
-            overflow: hidden;
+            gap: 15px;
+            margin-top: 20px;
         }
 
-        .user-avatar img {
-            width: 100%;
-            height: 100%;
-            object-fit: cover;
+        .btn-scoin {
+            padding: 10px 20px;
+            background-color: var(--scoin-color);
+            color: white;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+            font-weight: bold;
+            transition: var(--transition);
         }
 
-        .user-name {
-            color: white;
+        .btn-scoin:hover {
+            background-color: #7b1fa2;
+            transform: translateY(-2px);
+        }
+
+        .scoin-info {
+            text-align: center;
+            margin-top: 15px;
+            color: var(--text-light);
+            font-size: 0.9rem;
+        }
+
+        .admin-badge {
+            display: inline-block;
+            background-color: #ffd700;
+            color: #333;
+            padding: 3px 8px;
+            border-radius: 4px;
             font-weight: bold;
+            margin-left: 10px;
         }
 
         @media (max-width: 768px) {
@@ -535,6 +614,7 @@
         <a href="download.html" class="nav-link">下载</a>
         <a href="#projects" class="nav-link">项目</a>
         <a href="about.html" class="nav-link">关于</a>
+        <a href="scoin-system.html" class="nav-link">S币系统</a>
         
         <div id="authButtons">
             <a href="#" class="nav-link" id="loginBtn">登录</a>
@@ -544,6 +624,9 @@
         <div id="userStatus" class="user-status" style="display: none;">
             <div class="user-avatar" id="userAvatar"></div>
             <span class="user-name" id="userName"></span>
+            <span class="scoin-mini">
+                <i class="fas fa-coins"></i> S币: <span id="scoinCount">0</span>
+            </span>
             <a href="PersonalHomepage.html" class="home-link" title="个人主页">🏠</a>
             <a href="#" class="nav-link" id="logoutBtn">退出</a>
         </div>
@@ -600,7 +683,7 @@
                     <h4>版本历史</h4>
                     <div class="version-item">
                         <strong>v3.1.7</strong> (2025-8-31) - 新增高级功能
-                    </div>
+                    </极域电子教室破解工具div>
                     <div class="version-item">
                         <strong>v3.0.2</strong> (2025-7-15) - 修复已知问题，提升稳定性
                     </div>
@@ -621,6 +704,27 @@
                 <h3>订阅更新</h3>
                 <p>通过RSS订阅获取最新项目更新：</p>
                 <a href="rss.xml" id="rssLink">订阅RSS源</a>
+            </div>
+        </section>
+        
+        <!-- S币系统部分 -->
+        <section class="scoin-section">
+            <h2>S币系统</h2>
+            <div class="scoin-balance">
+                您的S币余额: <span class="scoin-count" id="scoinBalance">0</span>
+                <span id="adminBadge" class="admin-badge" style="display: none;">
+                    <i class="fas fa-crown"></i> 站长
+                </span>
+            </div>
+            
+            <div class="scoin-actions">
+                <button class="btn-scoin" id="claimScoinBtn">
+                    <i class="fas fa-gift"></i> 领取今日S币
+                </button>
+            </div>
+            
+            <div class="scoin-info" id="scoinInfo">
+                每天登录可领取1个S币
             </div>
         </section>
         
@@ -649,7 +753,7 @@
 
         <footer>
             <p>© 2023-2025 SYSTEM-HTY. 保留所有权利。</p>
-            <p>本网站使用HTML5、CSS3和JavaScript构建</极域电子教室破解工具p>
+            <p>本网站使用HTML5、CSS3和JavaScript构建</p>
             <p>加载时间: <span id="loadTime"></span> 毫秒</p>
         </footer>
     </div>
@@ -738,6 +842,16 @@
                 e.preventDefault();
                 netlifyIdentity.logout();
             });
+            
+            // 绑定领取S币按钮
+            document.getElementById('claimScoinBtn').addEventListener('click', function() {
+                const user = netlifyIdentity.currentUser();
+                if (user) {
+                    claimScoin(user);
+                } else {
+                    alert('请先登录');
+                }
+            });
         }
         
         // 更新用户界面
@@ -746,7 +860,8 @@
             const userStatus = document.getElementById('userStatus');
             const userName = document.getElementById('userName');
             const userAvatar = document.getElementById('userAvatar');
-            const commentForm = document.querySelector('.comment-form');
+            const scoinCount = document.getElementById('scoinCount');
+            const adminBadge = document.getElementById('adminBadge');
             
             if (user) {
                 // 用户已登录
@@ -755,17 +870,92 @@
                 userName.textContent = user.user_metadata.full_name || user.email;
                 
                 // 设置用户头像
-                userAvatar.textContent = (user.user_metadata.full_name || user.email).charAt(0).toUpperCase();
+                const initial = (user.user_metadata.full_name || user.email).charAt(0).toUpperCase();
+                userAvatar.textContent = initial;
                 
-                // 显示评论表单
-                if (commentForm) commentForm.style.display = 'block';
+                // 检查是否是站长
+                if (user.email === '644043561@qq.com') {
+                    adminBadge.style.display = 'inline-block';
+                }
+                
+                // 获取S币数据
+                getScoinData(user);
             } else {
                 // 用户未登录
                 authButtons.style.display = 'flex';
                 userStatus.style.display = 'none';
+                scoinCount.textContent = '0';
+                adminBadge.style.display = 'none';
+            }
+        }
+        
+        // 获取S币数据
+        async function getScoinData(user) {
+            try {
+                const response = await fetch('/.netlify/functions/get-scoin', {
+                    headers: {
+                        'Authorization': 'Bearer ' + user.token.access_token
+                    }
+                });
                 
-                // 隐藏评论表单
-                if (commentForm) commentForm.style.display = 'none';
+                if (!response.ok) {
+                    throw new Error('获取S币数据失败');
+                }
+                
+                const data = await response.json();
+                
+                // 更新显示
+                document.getElementById('scoinBalance').textContent = data.balance;
+                document.getElementById('scoinCount').textContent = data.balance;
+                
+                // 检查今天是否已经领取
+                const today = new Date().toISOString().split('T')[0];
+                if (data.lastClaimDate === today) {
+                    document.getElementById('claimScoinBtn').disabled = true;
+                    document.getElementById('claimScoinBtn').innerHTML = '<i class="fas fa-check"></i> 今日已领取';
+                    document.getElementById('scoinInfo').textContent = '您今天已经领取过S币了，明天再来吧！';
+                } else {
+                    document.getElementById('claimScoinBtn').disabled = false;
+                    document.getElementById('claimScoinBtn').innerHTML = '<i class="fas fa-gift"></i> 领取今日S币';
+                    document.getElementById('scoinInfo').textContent = '每天登录可领取1个S币';
+                }
+            } catch (error) {
+                console.error('获取S币数据时出错:', error);
+            }
+        }
+        
+        // 领取S币
+        async function claimScoin(user) {
+            const btn = document.getElementById('claimScoinBtn');
+            btn.disabled = true;
+            btn.innerHTML = '<i class="fas fa-spinner fa-spin"></i> 领取中...';
+            
+            try {
+                const response = await fetch('/.netlify/functions/claim-scoin', {
+                    method: 'POST',
+                    headers: {
+                        'Authorization': 'Bearer ' + user.token.access_token
+                    }
+                });
+                
+                if (!response.ok) {
+                    throw new Error('领取S币失败');
+                }
+                
+                const data = await response.json();
+                
+                // 更新显示
+                document.getElementById('scoinBalance').textContent = data.balance;
+                document.getElementById('scoinCount').textContent = data.balance;
+                btn.innerHTML = '<i class="fas fa-check"></i> 今日已领取';
+                document.getElementById('scoinInfo').textContent = '您今天已经领取过S币了，明天再来吧！';
+                
+                alert('成功领取S币！');
+            } catch (error) {
+                console.error('领取S币时出错:', error);
+                alert('领取失败: ' + error.message);
+                btn.disabled = false;
+                btn.innerHTML = '<i class="fas fa-gift"></i> 领取今日S币';
             }
         }
         
