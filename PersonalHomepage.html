@@ -150,57 +150,6 @@
             box-shadow: var(--shadow);
         }
 
-        .stats-container {
-            display: flex;
-            justify-content: space-around;
-            margin: 30px 0;
-        }
-
-        .stat-card {
-            text-align: center;
-            padding: 20px;
-            background: var(--card-bg);
-            border-radius: 8px;
-            width: 150px;
-            box-shadow: var(--shadow);
-            border-left: 4px solid var(--primary-color);
-        }
-
-        .stat-number {
-            font-size: 2.5em;
-            font-weight: bold;
-            color: var(--primary-color);
-            margin-bottom: 10px;
-        }
-
-        .stat-label {
-            color: var(--text-light);
-        }
-
-        .recent-activity {
-            margin-top: 30px;
-        }
-
-        .activity-list {
-            list-style: none;
-            padding: 0;
-        }
-
-        .activity-item {
-            padding: 15px;
-            margin-bottom: 15px;
-            background: var(--card-bg);
-            border-radius: 6px;
-            box-shadow: var(--shadow);
-            border-left: 4px solid var(--secondary-color);
-        }
-
-        .activity-date {
-            color: var(--text-light);
-            font-size: 0.9em;
-            margin-bottom: 5px;
-        }
-
         .logout-btn {
             padding: 12px 24px;
             background-color: var(--accent-color);
@@ -209,14 +158,9 @@
             border-radius: 4px;
             cursor: pointer;
             font-size: 16px;
-            font-weight: bold;
             margin-top: 20px;
-            transition: var(--transition);
-        }
-
-        .logout-btn:hover {
-            background-color: #c0392b;
-            transform: translateY(-2px);
+            display: block;
+            margin: 20px auto 0;
         }
 
         .login-prompt {
@@ -272,17 +216,6 @@
             .user-details {
                 grid-template-columns: 1fr;
             }
-            
-            .stats-container {
-                flex-direction: column;
-                align-items: center;
-                gap: 15px;
-            }
-            
-            .stat-card {
-                width: 100%;
-                max-width: 250px;
-            }
         }
     </style>
 </head>
@@ -300,11 +233,6 @@
         
         <div id="userContent">
             <!-- 用户内容将动态加载到这里 -->
-            <div class="login-prompt">
-                <h2>请先登录</h2>
-                <p>您需要登录才能查看个人主页内容</p>
-                <button class="login-btn" id="loginBtn">登录</button>
-            </div>
         </div>
         
         <footer>
@@ -356,11 +284,6 @@
                 clearTimeout(loadTimeout);
                 handleError('初始化过程中发生错误: ' + error.message);
             }
-            
-            // 绑定登录按钮
-            document.getElementById('loginBtn').addEventListener('click', function() {
-                netlifyIdentity.open('login');
-            });
         });
         
         // 处理用户初始化
@@ -422,7 +345,7 @@
                 </div>
             `;
             
-            // 重新绑定登录按钮事件
+            // 绑定登录按钮事件
             document.getElementById('loginBtn').addEventListener('click', function() {
                 netlifyIdentity.open('login');
             });
@@ -442,21 +365,6 @@
                     <div class="user-info">
                         <h2>${user.user_metadata.full_name || username}</h2>
                         <p>${user.email}</p>
-                    </div>
-                </div>
-                
-                <div class="stats-container">
-                    <div class="stat-card">
-                        <div class="stat-number">12</div>
-                        <div class="stat-label">项目数量</div>
-                    </div>
-                    <div class="stat-card">
-                        <div class="stat-number">28</div>
-                        <div class="stat-label">评论数量</div>
-                    </div>
-                    <div class="stat-card">
-                        <div class="stat-number">${Math.floor((new Date() - new Date(user.created_at)) / (1000 * 60 * 60 * 24))}</div>
-                        <div class="stat-label">使用天数</div>
                     </div>
                 </div>
                 
