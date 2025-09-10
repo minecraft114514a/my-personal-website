@@ -126,6 +126,7 @@
 
         .avatar:hover {
             transform: scale(1.05);
+            border-color: var(--secondary-color);
         }
 
         .user-info {
@@ -406,7 +407,7 @@
             
             <div class="profile-header">
                 <div class="avatar-container">
-                    <img src="https://images.unsplash.com/photo-1535713875002-d1d0cf377fde?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=500&q=80" alt="站长头像" class="avatar" id="userAvatar">
+                    <img src="images/avatar.jpg" alt="站长头像" class="avatar" id="userAvatar">
                 </div>
                 
                 <div class="user-info">
@@ -551,12 +552,11 @@
         // 设置用户头像
         document.addEventListener('DOMContentLoaded', function() {
             const avatar = document.getElementById('userAvatar');
-            // 在实际应用中，这里应该使用真实的头像路径
-            // avatar.src = 'images/avatar.jpg';
             
             // 添加加载错误处理
             avatar.onerror = function() {
-                this.src = 'images/avatar.jpg';
+                // 如果头像加载失败，使用默认头像
+                this.src = 'https://images.unsplash.com/photo-1535713875002-d1d0cf377fde?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=500&q=80';
             };
         });
     </script>
