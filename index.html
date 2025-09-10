@@ -300,7 +300,7 @@
 
         .theme-toggle {
             background: var(--card-bg);
-            border: 1px solid var(--border-color);
+            border: 1px solid var(--border极域电子教室破解工具-color);
             border-radius: 20px;
             padding: 6px 12px;
             cursor: pointer;
@@ -544,6 +544,7 @@
         <div id="userStatus" class="user-status" style="display: none;">
             <div class="user-avatar" id="userAvatar"></div>
             <span class="user-name" id="userName"></span>
+            <a href="PersonalHomepage.html" class="home-link" title="个人主页">🏠</a>
             <a href="#" class="nav-link" id="logoutBtn">退出</a>
         </div>
     </div>
@@ -625,15 +626,10 @@
         
         <section class="comments-section">
             <h2>用户评论</h2>
-            <div id="commentFormContainer">
-                <div class="comment-form">
-                    <input type="text" id="commentName" placeholder="您的姓名">
-                    <textarea id="commentText" placeholder="您的评论..."></textarea>
-                    <button id="submitComment">提交评论</button>
-                </div>
-                <p id="loginToComment" style="display: none; color: var(--accent-color);">
-                    请<a href="#" id="loginLink">登录</a>后发表评论
-                </p>
+            <div class="comment-form">
+                <input type="text" id="commentName" placeholder="您的姓名">
+                <textarea id="commentText" placeholder="您的评论..."></textarea>
+                <button id="submitComment">提交评论</button>
             </div>
             <div id="commentsList">
                 <!-- 评论将动态添加到这里 -->
@@ -653,7 +649,7 @@
 
         <footer>
             <p>© 2023-2025 SYSTEM-HTY. 保留所有权利。</p>
-            <p>本网站使用HTML5、CSS3和JavaScript构建</p>
+            <p>本网站使用HTML5、CSS3和JavaScript构建</极域电子教室破解工具p>
             <p>加载时间: <span id="loadTime"></span> 毫秒</p>
         </footer>
     </div>
@@ -682,6 +678,16 @@
                     
                     // 加载评论
                     loadComments();
+                    
+                    // 更新时间显示
+                    updateTime();
+                    setInterval(updateTime, 1000);
+                    
+                    // 初始化回到顶部按钮
+                    initBackToTop();
+                    
+                    // 初始化主题切换
+                    initThemeToggle();
                 } catch (error) {
                     console.error('初始化出错:', error);
                 }
@@ -727,11 +733,6 @@
                 netlifyIdentity.open('signup');
             });
             
-            document.getElementById('loginLink').addEventListener('click', function(e) {
-                e.preventDefault();
-                netlifyIdentity.open('login');
-            });
-            
             // 绑定退出按钮
             document.getElementById('logoutBtn').addEventListener('click', function(e) {
                 e.preventDefault();
@@ -746,7 +747,6 @@
             const userName = document.getElementById('userName');
             const userAvatar = document.getElementById('userAvatar');
             const commentForm = document.querySelector('.comment-form');
-            const loginToComment = document.getElementById('loginToComment');
             
             if (user) {
                 // 用户已登录
@@ -759,15 +759,13 @@
                 
                 // 显示评论表单
                 if (commentForm) commentForm.style.display = 'block';
-                if (loginToComment) loginToComment.style.display = 'none';
             } else {
                 // 用户未登录
                 authButtons.style.display = 'flex';
                 userStatus.style.display = 'none';
                 
-                // 隐藏评论表单，显示登录提示
+                // 隐藏评论表单
                 if (commentForm) commentForm.style.display = 'none';
-                if (loginToComment) loginToComment.style.display = 'block';
             }
         }
         
@@ -877,16 +875,19 @@
             }
             
             try {
+                const user = netlifyIdentity.currentUser();
+                const userId = user ? user.id : 'anonymous';
+                
                 const response = await fetch('/.netlify/functions/save-feedback', {
                     method: 'POST',
                     headers: {
                         'Content-Type': 'application/json',
-                    'Authorization': 'Bearer ' + (netlifyIdentity.currentUser() ? netlifyIdentity.currentUser().token.access_token : '')
                     },
                     body: JSON.stringify({
                         name,
                         email,
                         feedback: feedbackText,
+                        userId,
                         date: new Date().toISOString()
                     })
                 });
@@ -927,48 +928,47 @@
             }
         }
         
-        // 初始更新
-        updateTime();
-        
-        // 每秒更新一次
-        setInterval(updateTime, 1000);
-        
-        // 回到顶部功能
-        var backBtn = document.getElementById('backToTop');
-        if (backBtn) {
-            window.addEventListener('scroll', function() {
-                backBtn.style.display = window.scrollY > 300 ? 'block' : 'none';
-            });
-            
-            backBtn.addEventListener('click', function() {
-                window.scrollTo({ top: 0, behavior: 'smooth' });
-            });
+        // 初始化回到顶部按钮
+        function initBackToTop() {
+            var backBtn = document.getElementById('backToTop');
+            if (backBtn) {
+                window.addEventListener('scroll', function() {
+                    backBtn.style.display = window.scrollY > 300 ? 'block' : 'none';
+                });
+                
+                backBtn.addEventListener('click', function() {
+                    window.scrollTo({ top: 0, behavior: 'smooth' });
+                });
+            }
         }
         
-        // 主题切换功能
-        var themeToggle = document.getElementById('themeToggle');
-        if (themeToggle) {
-            // 检查本地存储的主题设置
-            if (localStorage.getItem('theme') === 'light') {
-                document.documentElement.removeAttribute('data-theme');
-                themeToggle.textContent = '🌓 切换暗色';
-            } else {
-                document.documentElement.setAttribute('data-theme', 'dark');
-                themeToggle.textContent = '🌓 切换亮色';
-            }
-            
-            themeToggle.addEventListener('click', function() {
-                var currentTheme = document.documentElement.getAttribute('data-theme');
-                if (currentTheme === 'dark') {
+        // 初始化主题切换
+        function initThemeToggle() {
+            var themeToggle = document.getElementById('themeToggle');
+            if (themeToggle) {
+                // 检查本地存储的主题设置
+                if (localStorage.getItem('theme') === 'light') {
                     document.documentElement.removeAttribute('data-theme');
-                    localStorage.setItem('theme', 'light');
                     themeToggle.textContent = '🌓 切换暗色';
                 } else {
                     document.documentElement.setAttribute('data-theme', 'dark');
                     localStorage.setItem('theme', 'dark');
                     themeToggle.textContent = '🌓 切换亮色';
                 }
-            });
+                
+                themeToggle.addEventListener('click', function() {
+                    var currentTheme = document.documentElement.getAttribute('data-theme');
+                    if (currentTheme === 'dark') {
+                        document.documentElement.removeAttribute('data-theme');
+                        localStorage.setItem('theme', 'light');
+                        themeToggle.textContent = '🌓 切换暗色';
+                    } else {
+                        document.documentElement.setAttribute('data-theme', 'dark');
+                        localStorage.setItem('theme', 'dark');
+                        themeToggle.textContent = '🌓 切换亮色';
+                    }
+                });
+            }
         }
     </script>
 </body>
