@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="zh" data-theme="dark">
+<html lang="zh" data-theme="light">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -18,7 +18,7 @@
             --card-bg: rgba(255, 255, 255, 0.92);
             --shadow: 0 4px 15px rgba(0, 0, 0, 0.25);
             --transition: all 0.3s ease;
-            --nav-bg: rgba(52, 152, 219, 0.8);
+            --nav-bg: rgba(255, 255, 255, 0.95);
             --border-color: #ddd;
             --scoin-color: #9c27b0;
             --gold-color: #ffd700;
@@ -30,7 +30,7 @@
             --text-light: #a0a0a0;
             --light-color: #121212;
             --card-bg: #1e1e1e;
-            --shadow: 0 4px 15px rgba(0, 0, 0, 极域电子教室破解工具0.6);
+            --shadow: 0 4px 15px rgba(0, 0, 0, 0.6);
             --primary-color: #64b5f6;
             --secondary-color: #81c784;
             --accent-color: #ff8a65;
@@ -38,8 +38,6 @@
             --nav-bg: rgba(30, 30, 30, 0.95);
             --border-color: #444;
             --scoin-color: #ba68c8;
-            --gold-color: #ffd700;
-            --silver-color: #c0c0c0;
         }
 
         * {
@@ -93,7 +91,7 @@
         }
 
         @keyframes fadeOut {
-            0% { opacity: 1; }
+            0% { opacity极域电子教室破解工具: 1; }
             100% { opacity: 0; visibility: hidden; }
         }
 
@@ -109,82 +107,76 @@
             align-items: center;
             z-index: 100;
             box-shadow: var(--shadow);
+            border-bottom: 1px solid var(--border-color);
+        }
+
+        /* ===== 品牌标志样式 ===== */
+        .brand {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .brand-logo {
+            height: 40px;
+            width: auto;
+            transition: var(--transition);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            overflow: hidden;
+            border-radius: 4px;
+        }
+
+        .brand-logo img {
+            height: 100%;
+            width: auto;
+            object-fit: contain;
+            transition: var(--transition);
+        }
+
+        .brand-name {
+            font-size: 1.5rem;
+            font-weight: bold;
+            color: var(--dark-color);
+            transition: var(--transition);
+        }
+
+        /* 导航栏悬停效果 */
+        .top-nav:hover .brand-logo {
+            transform: scale(1.05);
+        }
+
+        .top-nav:hover .brand-name {
+            color: var(--primary-color);
         }
 
         .nav-links {
             display: flex;
             gap: 15px;
-            align-items: center;
         }
 
         .nav-link {
             padding: 8px 15px;
             background-color: var(--nav-bg);
-            color: white !important;
+            color: var(--dark-color) !important;
             border-radius: 4px;
             text-decoration: none;
             transition: var(--transition);
             font-weight: bold;
             border: 1px solid var(--border-color);
-            display: flex;
-            align-items: center;
-            gap: 8px;
         }
 
         .nav-link:hover {
             background-color: var(--primary-color);
+            color: white !important;
             transform: translateY(-2px);
             box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
         }
 
-        .home-link {
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            width: 40px;
-            height: 40px;
-            background-color: var(--nav-bg);
-            color: white;
-            border-radius: 50%;
-            text-decoration: none;
-            transition: var(--transition);
-            font-size: 20px;
-            border: 1px solid var(--border-color);
-        }
-
-        .home-link:hover {
+        .nav-link.active {
             background-color: var(--primary-color);
-            transform: translateY(-2px);
-            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
-        }
-
-        .search-container {
-            display: flex;
-            align-items: center;
-            background: rgba(255, 255, 255, 0.2);
-            border-radius: 20px;
-            padding: 5px 15px;
-            width: 300px;
-        }
-
-        .search-container input {
-            background: transparent;
-            border: none;
-            color: white;
-            padding: 8px;
-            width: 100%;
-            outline: none;
-        }
-
-        .search-container input::placeholder {
-            color: rgba(255, 255, 255, 0.7);
-        }
-
-        .search-container button {
-            background: transparent;
-            border: none;
-            color: white;
-            cursor: pointer;
+            color: white !important;
         }
 
         .user-status {
@@ -206,8 +198,14 @@
             overflow: hidden;
         }
 
+        .user-avatar img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+        }
+
         .user-name {
-            color: white;
+            color: var(--dark-color);
             font-weight: bold;
         }
 
@@ -228,7 +226,7 @@
         .logout-btn {
             background: none;
             border: none;
-            color: white;
+            color: var(--dark-color);
             cursor: pointer;
             font-size: 0.9rem;
             padding: 8px 15px;
@@ -238,15 +236,16 @@
 
         .logout-btn:hover {
             background-color: var(--accent-color);
+            color: white;
         }
 
         .container {
-            max-width: 1000px;
+            max-width: 1200px;
             margin: 80px auto 40px;
-            padding: 30px;
+            padding: 20px;
         }
 
-        .scoin-section {
+        .scoin-container {
             background: var(--card-bg);
             border-radius: 10px;
             padding: 30px;
@@ -256,7 +255,7 @@
             position: relative;
         }
 
-        .scoin-section::before {
+        .scoin-container::before {
             content: "";
             position: absolute;
             top: 0;
@@ -587,7 +586,7 @@
             background: var(--card-bg);
             padding: 15px 25px;
             border-radius: 8px;
-            box-shadow: var(--shadow);
+            box-shadow: var极域电子教室破解工具(--shadow);
             z-index: 1000;
             display: flex;
             align-items: center;
@@ -598,7 +597,7 @@
         }
 
         .notification.show {
-            opacity: 1;
+            opacity: 极域电子教室破解工具1;
         }
 
         .notification-icon {
@@ -606,31 +605,34 @@
             font-size: 1.5rem;
         }
 
+        /* ===== 移动设备适配 ===== */
         @media (max-width: 768px) {
             .top-nav {
-                flex-wrap: wrap;
-                padding: 10px;
+                flex-direction: column;
+                align-items: flex-start;
+                gap: 10px;
+            }
+            
+            .brand {
+                flex-direction: row;
+                align-items: center;
+            }
+            
+            .brand-logo {
+                height: 35px;
+            }
+            
+            .brand-name {
+                font-size: 1.2rem;
             }
             
             .nav-links {
-                width: 100%;
-                margin-bottom: 10px;
-                justify-content: center;
-            }
-            
-            .search-container {
-                width: 100%;
-                margin: 10px 0;
-            }
-            
-            .user-status {
-                width: 100%;
-                justify-content: center;
+                flex-wrap: wrap;
             }
             
             .container {
-                margin: 120px 15px 40px;
-                padding: 20px;
+                margin: 100px 10px 40px;
+                padding: 15px;
             }
             
             .action-buttons {
@@ -661,6 +663,14 @@
     </div>
     
     <div class="top-nav">
+        <div class="brand">
+            <div class="brand-logo">
+                <img src="images/2.webp" alt="SYSTEM-HTY标志" 
+                     onerror="this.onerror=null; this.src='https://via.placeholder.com/576x245?text=SYSTEM-HTY'">
+            </div>
+            <div class="brand-name">SYSTEM-HTY</div>
+        </div>
+        
         <div class="nav-links">
             <a href="index.html" class="nav-link">
                 <i class="fas fa-home"></i> 主页
@@ -674,14 +684,9 @@
             <a href="about.html" class="nav-link">
                 <i class="fas fa-info-circle"></i> 关于
             </a>
-            <a href="scoin-system.html" class="nav-link">
+            <a href="scoin-system.html" class="nav-link active">
                 <i class="fas fa-coins"></i> S币系统
             </a>
-            
-            <div class="search-container">
-                <input type="text" placeholder="搜索...">
-                <button><i class="fas fa-search"></i></button>
-            </div>
         </div>
         
         <div id="authButtons">
@@ -699,7 +704,9 @@
             <span class="scoin-mini">
                 <i class="fas fa-coins"></i> <span id="scoinCount">0</span>
             </span>
-            <a href="PersonalHomepage.html" class="home-link" title="个人主页">🏠</a>
+            <a href="PersonalHomepage.html" class="nav-link" title="个人主页">
+                <i class="fas fa-home"></i>
+            </a>
             <button class="logout-btn" id="logoutBtn">
                 <i class="fas fa-sign-out-alt"></i> 退出
             </button>
@@ -707,7 +714,7 @@
     </div>
     
     <div class="container">
-        <div class="scoin-section">
+        <div class="scoin-container">
             <div class="admin-badge" id="adminBadge" style="display: none;">
                 <i class="fas fa-crown"></i>
                 <span>站长</span>
@@ -717,29 +724,30 @@
             
             <div class="profile-header">
                 <div class="avatar-container">
-                    <img src="https://images.unsplash.com/photo-1535713875002-d1d0cf377fde?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=500&q=80" alt="站长头像" class="avatar" id="userAvatarImg">
+                    <img src="images/avatar.jpg" alt="站长头像" class="avatar" id="userAvatarImg"
+                         onerror="this.onerror=null; this.src='https://images.unsplash.com/photo-1535713875002-d1d0cf377fde?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=500&q=80'">
                 </div>
                 
                 <div class="user-info">
-                    <h2>SYSTEM-HTY</h2>
-                    <div class="user-title">Python开发者 & 全栈工程师</div>
+                    <h2 id="displayName">SYSTEM-HTY</h2>
+                    <div class="user-title" id="userTitle">Python开发者 & 全栈工程师</div>
                     
                     <div class="user-details">
                         <div class="detail-item">
                             <span class="detail-label">用户ID:</span>
-                            <span class="detail-value">448db304-59ac-4e9b-a489-acbcd39a9ce7</span>
+                            <span class="detail-value" id="userId">448db304-59ac-4e9b-a489-acbcd39a9ce7</span>
                         </div>
                         <div class="detail-item">
                             <span class="detail-label">邮箱:</span>
-                            <span class="detail-value">644043561@qq.com</span>
+                            <span class="detail-value" id="userEmail">644043561@qq.com</span>
                         </div>
                         <div class="detail-item">
                             <span class="detail-label">账户类型:</span>
-                            <span class="detail-value">站长</span>
+                            <span class="detail-value" id="userType">站长</span>
                         </div>
                         <div class="detail-item">
                             <span class="detail-label">加入时间:</span>
-                            <span class="detail-value">2023-01-15</span>
+                            <span class="detail-value" id="joinDate">2023-01-15</span>
                         </div>
                     </div>
                     
@@ -813,7 +821,7 @@
                 
                 <div class="feature-card">
                     <div class="feature-icon">
-                        <i class="fas fa-shield-alt"></i>
+                        <i class="fas fa-shield-alt"></极域电子教室破解工具i>
                     </div>
                     <div class="feature-title">安全中心</div>
                     <div class="feature-desc">监控安全事件，管理访问权限</div>
@@ -832,7 +840,7 @@
                 <i class="fas fa-chart-bar"></i> 查看统计
             </button>
             <button class="btn btn-gold">
-                <i class="fas fa-crown"></i> 站长控制台
+                <i class="fas fa-crown"></极域电子教室破解工具i> 站长控制台
             </button>
             <button class="btn btn-scoin" id="claimScoinBtn">
                 <i class="fas fa-gift"></i> 领取今日S币
@@ -935,6 +943,8 @@
             const userAvatar = document.getElementById('userAvatar');
             const scoinCount = document.getElementById('scoinCount');
             const adminBadge = document.getElementById('adminBadge');
+            const displayName = document.getElementById('displayName');
+            const userType = document.getElementById('userType');
             
             if (user) {
                 // 用户已登录
@@ -944,6 +954,7 @@
                 // 设置用户信息
                 const name = user.user_metadata.full_name || user.email;
                 userName.textContent = name;
+                displayName.textContent = name;
                 
                 // 设置用户头像
                 const initial = name.charAt(0).toUpperCase();
@@ -951,18 +962,20 @@
                 
                 // 检查是否是站长
                 if (user.email === '644043561@qq.com') {
-                    adminBadge.style.display = 'flex';
+                    adminBadge.style.display = 'block';
+                    userType.textContent = '站长';
                 } else {
                     adminBadge.style.display = 'none';
+                    userType.textContent = '普通用户';
                 }
             } else {
                 // 用户未登录
                 authButtons.style.display = 'flex';
                 userStatus.style.display = 'none';
-                adminBadge.style.display = 'none';
                 scoinCount.textContent = '0';
                 document.getElementById('scoinBalance').textContent = '0';
                 document.getElementById('scoinInfo').textContent = '请登录后领取S币';
+                adminBadge.style.display = 'none';
             }
         }
         
@@ -1053,28 +1066,28 @@
         
         // 初始化主题切换
         function initThemeToggle() {
-            const themeToggle = document.getElementById('themeToggle');
+            var themeToggle = document.getElementById('themeToggle');
             if (themeToggle) {
                 // 检查本地存储的主题设置
                 if (localStorage.getItem('theme') === 'light') {
                     document.documentElement.removeAttribute('data-theme');
-                    themeToggle.innerHTML = '<i class="fas fa-sun"></i>';
+                    themeToggle.innerHTML = '<i class="fas fa-moon"></i>';
                 } else {
                     document.documentElement.setAttribute('data-theme', 'dark');
                     localStorage.setItem('theme', 'dark');
-                    themeToggle.innerHTML = '<i class="fas fa-moon"></i>';
+                    themeToggle.innerHTML = '<i class="fas fa-sun"></i>';
                 }
                 
                 themeToggle.addEventListener('click', function() {
-                    const isDark = document.documentElement.getAttribute('data-theme') === 'dark';
-                    if (isDark) {
+                    var currentTheme = document.documentElement.getAttribute('data-theme');
+                    if (currentTheme === 'dark') {
                         document.documentElement.removeAttribute('data-theme');
                         localStorage.setItem('theme', 'light');
-                        this.innerHTML = '<i class="fas fa-sun"></i>';
+                        this.innerHTML = '<i class="fas fa-moon"></i>';
                     } else {
                         document.documentElement.setAttribute('data-theme', 'dark');
                         localStorage.setItem('theme', 'dark');
-                        this.innerHTML = '<i class="fas fa-moon"></i>';
+                        this.innerHTML = '<i class="fas fa-sun"></i>';
                     }
                 });
             }
